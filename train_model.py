@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 # TRAIN? 1, TEST? 0
-TRAIN = 0
+TRAIN = 1
 
 # first, read training/validation data's directory
 training_data_dir = "data/training"
@@ -16,10 +16,10 @@ validation_data_dir = "data/validation"
 test_data_dir = "data/test"
 
 # hyperparameters
-IMAGE_WIDTH, IMAGE_HEIGHT = 224, 224
+IMAGE_WIDTH, IMAGE_HEIGHT = 256, 256
 RGB = 3
-EPOCHS = 100
-BATCH_SIZE = 32
+EPOCHS = 20
+BATCH_SIZE = 16
 
 # create CNN model
 model = Sequential()
@@ -57,7 +57,7 @@ training_data_generator = ImageDataGenerator(
     shear_range=0.1,
     zoom_range=0.1,
     rotation_range=5,
-    horizontal_flip=True)
+    horizontal_flip=False)
 
 validation_data_generator = ImageDataGenerator(
     rescale=1/225
@@ -96,35 +96,6 @@ if(TRAIN):
         validation_data=validation_generator,
         validation_steps=len(validation_generator.filenames) // BATCH_SIZE,
         verbose=1,
-        callbacks=[CSVLogger('log3.csv', append=False, separator=",")])
+        callbacks=[CSVLogger('log_256_256_2.csv', append=False, separator=",")])
 
-    model.save_weights('model.h5')
-# testing
-else:
-    model.load_weights('model_100epoch_no_hor_flip.h5')
-
-    #TEST_FILE = "test_file.txt"
-    #open(TEST_FILE,"w")
-
-    STEP_SIZE_TEST=test_generator.n//test_generator.batch_size
-
-    prediction = model.predict_generator(test_generator, steps=STEP_SIZE_TEST, verbose=1)
-    
-    predicted_class_indices=np.argmax(prediction,axis=1)
-    print(predicted_class_indices)
-
-    labels = (test_generator.class_indices)
-    print(labels)
-    labels = dict((v,k) for k,v in labels.items())
-    predictions = [labels[k] for k in predicted_class_indices]
-
-    filenames=test_generator.filenames
-    results=pd.DataFrame({"Filename":filenames,
-                      "Predictions":predictions})
-    results.to_csv("results.csv",index=False)
-
-    loss, acc = model.evaluate_generator(test_generator, steps=STEP_SIZE_TEST, verbose=1)
-    print(loss)
-    print(acc)
-
-
+    model.save('model.h5')
