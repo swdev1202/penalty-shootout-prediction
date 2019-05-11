@@ -10,6 +10,15 @@ Y_MIN = 308
 X_MAX = 706
 X_MIN = 450
 
+LEFT_MIN = (280,141)
+LEFT_MAX = (522,351)
+
+CENTER_MIN = (522,141)
+CENTER_MAX = (764,351)
+
+RIGHT_MIN = (764,141)
+RIGHT_MAX = (1006,351)
+
 model_dir = 'model'
 model_name = 'model_256_256_20epoch_entire_model.h5'
 
@@ -22,8 +31,12 @@ video_name = 'test.mp4'
 vid = cv2.VideoCapture(os.path.join(video_path, video_name))
 vid.set(cv2.CAP_PROP_POS_MSEC,33.3)
 
+#fourcc = cv2.VideoWriter_fourcc(*'DIVX')
+#out = cv2.VideoWriter('output.avi', fourcc, 60.0, (1280,720))
+
 index = 0
 while(True):
+    start = time.time()
     ret, frame = vid.read()
     
     if not ret:
@@ -43,17 +56,29 @@ while(True):
     label = ""
     if(pred == 0):
         label = "center"
+        #cv2.rectangle(frame, CENTER_MIN, CENTER_MAX, (255,0,0), 1)
     elif(pred == 1):
         label = "left"
+        #cv2.rectangle(frame, LEFT_MIN, LEFT_MAX, (0,255,0), 1)
     elif(pred == 2):
         label = "right"
+        #cv2.rectangle(frame, RIGHT_MIN, RIGHT_MAX, (0,0,225), 1)
     else:
         label = "unknown"
+    end = time.time()
 
-    cv2.putText(frame, label, (500,260), cv2.FONT_HERSHEY_SIMPLEX, 5.0, (0,0,255), 2)
+    time_diff = str(int(1/(end-start))) + " FPS"
+    cv2.putText(frame, time_diff, (3,30), cv2.FONT_HERSHEY_DUPLEX, 1.0, (0,0,255), 2)
+    cv2.putText(frame, label, (1150,30), cv2.FONT_HERSHEY_DUPLEX, 1.0, (0,0,255), 2)
     
-    #name = './data/video_results' + str(index) + '.jpg'
+    #out.write(frame)
+
+    #name = '/result/video_frames' + str(index) + '.jpg'
     #cv2.imwrite(name, frame)
     cv2.imshow("output", frame)
     cv2.waitKey(0)
-    index += 1
+    #index += 1
+
+#vid.release()
+#out.release()
+#cv2.destroyAllWindows()

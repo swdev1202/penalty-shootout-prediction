@@ -15,12 +15,10 @@ image_path = 'data/test'
 image_names = os.listdir(image_path)
 
 for image in image_names:
-    img = cv2.imread(os.path.join(image_path,image), 3)
-    print(type(img))
-    cv2.imshow("img", img)
-    cv2.waitKey(0)
-
     start = time.time()
+    img = cv2.imread(os.path.join(image_path,image), 3)
+    #cv2.imshow("img", img)
+    #cv2.waitKey(0)
 
     img = img.astype('float')/255.0
     

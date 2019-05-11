@@ -14,6 +14,7 @@ TRAIN = 1
 training_data_dir = "data/training"
 validation_data_dir = "data/validation"
 test_data_dir = "data/test"
+MODEL_SUMMARY_FILE = "model_summary.txt"
 
 # hyperparameters
 IMAGE_WIDTH, IMAGE_HEIGHT = 256, 256
@@ -50,6 +51,10 @@ model.add(Dense(3))
 model.add(Activation('softmax'))
 
 model.compile(loss='categorical_crossentropy', optimizer=RMSprop(lr=0.0001), metrics=['accuracy'])
+model.summary()
+
+with open(MODEL_SUMMARY_FILE,"w") as fh:
+    model.summary(print_fn=lambda line: fh.write(line + "\n"))
 
 # data augmentation
 training_data_generator = ImageDataGenerator(
