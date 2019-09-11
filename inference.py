@@ -6,7 +6,7 @@ import cv2
 import time
 
 model_dir = 'model'
-model_name = 'model_grayscale.h5'
+model_name = 'model_complete.h5'
 
 # load model
 model = load_model(os.path.join(model_dir, model_name))
@@ -16,7 +16,7 @@ image_names = os.listdir(image_path)
 
 for image in image_names:
     start = time.time()
-    img = cv2.imread(os.path.join(image_path,image), 0)
+    img = cv2.imread(os.path.join(image_path,image), 3)
     #cv2.imshow("img", img)
     #cv2.waitKey(0)
 

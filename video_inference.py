@@ -20,7 +20,7 @@ RIGHT_MIN = (764,141)
 RIGHT_MAX = (1006,351)
 
 model_dir = 'model'
-model_name = 'model_256_256_20epoch_entire_model.h5'
+model_name = 'model_complete.h5'
 
 # load model
 model = load_model(os.path.join(model_dir, model_name))

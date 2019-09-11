@@ -13,7 +13,7 @@ TRAIN = 1
 training_data_dir = "data/training"
 validation_data_dir = "data/validation"
 test_data_dir = "data/test"
-MODEL_SUMMARY_FILE = "model_summary2.txt"
+MODEL_SUMMARY_FILE = "model_summary.txt"
 
 # hyperparameters
 IMAGE_WIDTH, IMAGE_HEIGHT = 256, 256
@@ -25,7 +25,7 @@ BATCH_SIZE = 4
 # create CNN model
 model = Sequential()
 
-model.add(Conv2D(32,(3,3), padding='same', input_shape=(IMAGE_WIDTH, IMAGE_HEIGHT, GRAY), activation='relu'))
+model.add(Conv2D(32,(3,3), padding='same', input_shape=(IMAGE_WIDTH, IMAGE_HEIGHT, RGB), activation='relu'))
 model.add(Conv2D(32,(3,3), padding='same', activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 
@@ -77,15 +77,13 @@ training_generator = training_data_generator.flow_from_directory(
     training_data_dir,
     target_size=(IMAGE_WIDTH, IMAGE_HEIGHT),
     batch_size=BATCH_SIZE,
-    class_mode='categorical',
-    color_mode = 'grayscale')
+    class_mode='categorical')
 
 validation_generator = validation_data_generator.flow_from_directory(
     validation_data_dir,
     target_size=(IMAGE_WIDTH, IMAGE_HEIGHT),
     batch_size=BATCH_SIZE,
-    class_mode='categorical',
-    color_mode = 'grayscale')
+    class_mode='categorical')
 
 test_generator = test_data_generator.flow_from_directory(
     test_data_dir,
@@ -103,6 +101,6 @@ if(TRAIN):
         validation_data=validation_generator,
         validation_steps=len(validation_generator.filenames) // BATCH_SIZE,
         verbose=1,
-        callbacks=[CSVLogger('log_256_256_2.csv', append=False, separator=",")])
+        callbacks=[CSVLogger('log.csv', append=False, separator=",")])
 
-    model.save('model_grayscale.h5')
+    model.save('model.h5')
