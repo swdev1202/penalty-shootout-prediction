@@ -10,22 +10,22 @@ import pandas as pd
 # TRAIN? 1, TEST? 0
 TRAIN = 1
 
-# first, read training/validation data's directory
 training_data_dir = "data/training"
 validation_data_dir = "data/validation"
 test_data_dir = "data/test"
-MODEL_SUMMARY_FILE = "model_summary.txt"
+MODEL_SUMMARY_FILE = "model_summary2.txt"
 
 # hyperparameters
 IMAGE_WIDTH, IMAGE_HEIGHT = 256, 256
 RGB = 3
+GRAY = 1
 EPOCHS = 20
-BATCH_SIZE = 16
+BATCH_SIZE = 4
 
 # create CNN model
 model = Sequential()
 
-model.add(Conv2D(32,(3,3), padding='same', input_shape=(IMAGE_WIDTH, IMAGE_HEIGHT, RGB), activation='relu'))
+model.add(Conv2D(32,(3,3), padding='same', input_shape=(IMAGE_WIDTH, IMAGE_HEIGHT, GRAY), activation='relu'))
 model.add(Conv2D(32,(3,3), padding='same', activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 
@@ -77,13 +77,15 @@ training_generator = training_data_generator.flow_from_directory(
     training_data_dir,
     target_size=(IMAGE_WIDTH, IMAGE_HEIGHT),
     batch_size=BATCH_SIZE,
-    class_mode='categorical')
+    class_mode='categorical',
+    color_mode = 'grayscale')
 
 validation_generator = validation_data_generator.flow_from_directory(
     validation_data_dir,
     target_size=(IMAGE_WIDTH, IMAGE_HEIGHT),
     batch_size=BATCH_SIZE,
-    class_mode='categorical')
+    class_mode='categorical',
+    color_mode = 'grayscale')
 
 test_generator = test_data_generator.flow_from_directory(
     test_data_dir,
@@ -103,4 +105,4 @@ if(TRAIN):
         verbose=1,
         callbacks=[CSVLogger('log_256_256_2.csv', append=False, separator=",")])
 
-    model.save('model.h5')
+    model.save('model_grayscale.h5')
