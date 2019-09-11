@@ -1,7 +1,7 @@
 # Penalty Shootout Prediction
 
 ## Introduction
-this is a CNN classifier to predict where the ball will go before the kicker's contact with the ball with a single image. It was hard to find high resolution images of real players. Therefore, I decided to collect and create my own dataset using FIFA 18.
+This is a CNN classifier to predict where the ball will go before the kicker's contact with the ball with a single image. It was hard to find high resolution images of real players. Therefore, I decided to collect and create my own dataset using FIFA 18.
 
 ## Quick Start
 1. Download the custom dataset [HERE](https://drive.google.com/file/d/1l0aXfoB5dWNBcomUI-EitTZeS9tWMh-2/view?usp=sharing)
